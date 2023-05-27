@@ -1,12 +1,11 @@
 package com.example.gisassignment1.model;
 
 import com.vividsolutions.jts.geom.Geometry;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "last6")
+@Table(name = "poi_table")
 public class Poi {
 
 
@@ -14,7 +13,7 @@ public class Poi {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "Geometry", nullable = true)
+    @Column(columnDefinition = "Geometry")
     private Geometry geometry;
 
     public Poi() {
