@@ -4,26 +4,26 @@ import com.vividsolutions.jts.geom.Geometry;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "pois")
-public class Poi {
 
+@Entity
+@Table(name = "lines2")
+public class Line {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "Geometry" , name = "geometry")
-    private Geometry point;
+    @Column(columnDefinition = "Geometry")
+    private Geometry geometry;
 
-    public Poi() {
+
+    public Line() {
     }
 
-    public Poi(Long id, Geometry point) {
+    public Line(Long id, Geometry geometry) {
         this.id = id;
-        this.point = point;
+        this.geometry = geometry;
     }
-
 
     public Long getId() {
         return id;
@@ -34,10 +34,10 @@ public class Poi {
     }
 
     public Geometry getGeometry() {
-        return point;
+        return geometry;
     }
 
     public void setGeometry(Geometry geometry) {
-        this.point = geometry;
+        this.geometry = geometry;
     }
 }

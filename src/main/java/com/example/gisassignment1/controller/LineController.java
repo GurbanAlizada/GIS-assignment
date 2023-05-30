@@ -1,7 +1,7 @@
 package com.example.gisassignment1.controller;
 
 
-import com.example.gisassignment1.service.PoiService;
+import com.example.gisassignment1.service.LineService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,22 +10,27 @@ import org.springframework.web.bind.annotation.RestController;
 import org.wololo.geojson.FeatureCollection;
 
 @RestController
-@RequestMapping("/v1/api/pois")
-public class PoiController {
+@RequestMapping("/api/v1/lines")
+public class LineController {
 
-    private final PoiService poiService;
+    private final LineService lineService;
 
 
-    public PoiController(PoiService poiService) {
-        this.poiService = poiService;
+    public LineController(LineService lineService) {
+        this.lineService = lineService;
     }
 
 
     @PostMapping
-    public ResponseEntity<?> postLocation(@RequestBody FeatureCollection featureCollection) {
-         poiService.save( featureCollection);
-         return ResponseEntity.ok("Success");
+    public ResponseEntity<?> save( @RequestBody  FeatureCollection featureCollection){
+        lineService.save(featureCollection);
+        return ResponseEntity.ok("Success");
     }
+
+
+
+
+
 
 
 

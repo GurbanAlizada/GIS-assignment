@@ -1,22 +1,21 @@
 package com.example.gisassignment1.service;
 
-import com.example.gisassignment1.config.GeometryHelper;
+import com.example.gisassignment1.model.Building;
+import com.example.gisassignment1.util.GeometryHelper;
 import com.example.gisassignment1.model.Poi;
 import com.example.gisassignment1.repository.PoiRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.wololo.geojson.Feature;
 import org.wololo.geojson.FeatureCollection;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 @Service
 public class PoiService {
 
     private final PoiRepository poiRepository;
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
 
     public PoiService(PoiRepository poiRepository) {
@@ -24,7 +23,9 @@ public class PoiService {
     }
 
 
+    @Transactional
     public void save(FeatureCollection featureCollection){
+
         Feature[] features = featureCollection.getFeatures();
         List<Poi> pois = new ArrayList<>();
 
@@ -41,6 +42,32 @@ public class PoiService {
         return entity;
     }
 
+
+    protected Feature convertEntityToFeature(Poi entity) {
+        Long id = entity.getId();
+        org.wololo.geojson.Geometry geometry = GeometryHelper.convertJtsGeometryToGeoJson(entity.getGeometry());
+
+        Map<String, Object> properties = new HashMap<>();
+        Arrays.stream(Poi.class.getDeclaredFields())
+                .filter(i -> !i.isSynthetic())
+                .forEach(field -> {
+                    try {
+                        field.setAccessible(true);
+                        if (field.getType() != com.vividsolutions.jts.geom.Geometry.class && !field.getName().equals("id") && !field.getName().equals("user")) {
+                            properties.put(field.getName(), field.get(entity));
+                        }
+                    } catch (IllegalAccessException e) {
+                    }
+                });
+
+        return new Feature(id, geometry, properties);
+    }
+
+
+
+    protected List<Poi> findAll(){
+      return   poiRepository.findAll();
+    }
 
 
 }
